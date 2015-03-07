@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="deliverMeApp" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>FIWARE Deliverables Tool</title>
+<meta name="description"
+  content="FIWARE Deliverables Tool">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Bootstrap core CSS -->
+<link href="./css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom CSS for SB Admin Theme -->
+<link href="css/sb-admin.css" rel="stylesheet">
+<!-- Custom Fonts used in SB Admin Theme -->
+<link href="css/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet"
+  type="text/css">
+<link rel="stylesheet" href="css/app.css">
+
+</head>
+<body>
+
+  <div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse"
+          data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span> <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html">FIWARE Deliverables Tool</a>
+      </div>
+
+      <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav side-nav">
+          <li><a href="#deliverables"><i class="fa fa-fw fa-dashboard"></i>
+              Deliverables</a></li>
+          <li><a href="https://github.com/acs/gaas"><img
+              style="margin-left: 10px" src="circle.svg" width="50px"></a></li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+
+    <div id="page-wrapper">
+      <div class="container-fluid">
+        <div ng-view></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+  -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+  <script src="app.js"></script>
+  <script src="auth/auth.js"></script>
+  <script src="deliverables/deliverables.js"></script>
+</body>
+</html>

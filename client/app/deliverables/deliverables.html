@@ -1,0 +1,76 @@
+<div class="row">
+  <h3>Dashboard Deliverables Management</h3>
+</div>
+
+<div class="row well" style="margin-bottom: 10px">
+  <span class="h5 ">Select dashboard</span> <select
+    ng-model="dash_selected.name" ng-change="select_dash()">
+    <option ng-repeat="dash in dashes">{{dash}}</option>
+  </select> <input type="text" ng-model="new_dash">
+  <button data-ng-click="create_dash_file()">Create</button>
+</div>
+
+<div class="row" data-ng-show="dash_selected.name != ''">
+  <div class="col-md-4">
+    Project name <input ng-model="dash_selected['project_new']" size="15">
+    <button ng-click="create_project(dash_selected.name)">Add</button>
+  </div>
+  <div class="col-md-8" data-ng-show="dash_selected.name != ''">
+    http://github.com/<input ng-model="dash_selected['source_url']" size="20">
+    <select ng-model="dash_selected['project']">
+      <option ng-repeat="(key, project) in projects">{{key}}</option>
+    </select>
+    <button ng-click="add_repo()">Publish {{org.name}}</button>
+  </div>
+</div>
+
+<div data-ng-show="error != undefined" style="margin-top: 10px"
+  class="row alert alert-danger alert-dismissable">
+  <button type="button" class="close" data-ng-click="error = undefined"
+    aria-hidden="true">&times;</button>
+  ERROR: {{error}}
+</div>
+
+<div data-ng-show="message != undefined" style="margin-top: 10px"
+  class="alert alert-success alert-dismissable">
+  <button type="button" class="close" data-ng-click="message = undefined"
+    aria-hidden="true">&times;</button>
+  Result: <span ng-bind-html="message"></span>
+</div>
+
+
+<div class="row" style="max-width: 600px; margin-top: 20px"
+  data-ng-show="dash_selected.name != ''">
+  <div class="panel panel-default panel-info">
+    <div class="panel-heading">
+      Deliverables in the Dashboard <i data-ng-show="checking || webing"
+        class="fa fa-spinner fa-spin fa-3x"></i>
+      <button type="button" data-ng-click="check_projects()">
+        <span class="fa fa-check" aria-hidden="true"></span>
+      </button>
+      <button type="button" data-ng-click="update_dash_file()">
+        <span class="fa fa-file-archive-o" aria-hidden="true"></span>
+      </button>
+      <button type="button" data-ng-click="create_dash()">
+        <span class="fa fa-tachometer" aria-hidden="true"></span>
+      </button>
+      <span style="float: right">Filter <input ng-model="filter_text">
+      </span>
+    </div>
+    <div class="panel-body">
+      <ul>
+        <li ng-repeat="(key, project) in projects">{{key}}
+          <ul>
+            <li ng-repeat="(ds_name, ds_list) in project">{{ds_name}}
+              <ul>
+                <li ng-repeat="ds_url in ds_list | filter:filter_text ">{{ds_url}}
+
+                
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
