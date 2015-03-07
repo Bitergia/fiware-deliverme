@@ -12,11 +12,9 @@ angular.module('deliverMe.auth', ['ngRoute'])
 .controller('AuthCtrl', ['$scope', '$rootScope', '$location', '$http', 'GlobalContextService',
                          function($scope, $rootScope, $location, $http, GlobalContextService) {
 
-    // Use login, password and app to get auth_token from IDM server
-    // The app is registered in an organization
-    $scope.user = 'chanchan@idm.server';
-    $scope.password = 'ccadmin';
-    // The id and secret comes from IDM application data in the org
+    // Use login, password get auth_token from server
+    $scope.user = '';
+    $scope.password = '';
 
     $scope.auth = function() {
         var data = 'username='+$scope.user;
