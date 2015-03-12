@@ -1,11 +1,66 @@
+<div style="margin-bottom: 10px;">This page allows administration of files
+  and can run commands in order to create generated FI-WARE deliverables. Please
+  use the Links provided in order to invoke tasks Please bear in mind, this page
+  asks no questions, if you press a button, it will get executed. The tooltips
+  (mouseover) should hopefully guide you through... But: you should know what
+  you are doing, otherwise please contact fiware@bitergia.com</div>
+
 <div class="row">
-  <div class="col-md-4">
-    <div style="height: 600px; background-color: #00AAFF"></div>
+  <div class="col-md-5">
+    <h4>Actions</h4>
+    <!--  <div style="height: 600px; background-color: #00AAFF"> -->
+    <div>
+      <div class="panel panel-default panel-primary">
+        <div class="panel-heading">WP10</div>
+        <div class="panel-body">
+        <ul>
+        <li><a href="">Generate D10.4.1 (testbed wiki)</a></li>
+        <li><a href="">Generate D10.5.1 (fi-ware-review)</a></li>
+        </ul> 
+        </div>
+      </div>
+      <div style="height:250px" class="panel panel-default panel-primary">
+        <div class="panel-heading">D.X.1.1 Open Specs</div>
+        <div class="panel-body">
+          <div ng-controller="TabsGenerateCtrl">
+            <tabset> 
+                <tab heading="X1.1">
+                  D.X.1.1 Open Specs
+                  <ul>
+                    <li><a href="">Generate D3.1.1b</a></li>
+                    <li>Generate D4.1.1b</li>
+                    <li>Generate D5.1.1b</li>
+                    <li>Generate D6.1.1b</li>
+                    <li>Generate D7.1.1b</li>
+                    <li>Generate D8.1.1b</li>
+                  </ul>
+                </tab> 
+                <tab ng-repeat="tab in tabs" heading="{{tab.title}}"
+                    active="tab.active" disabled="tab.disabled"> {{tab.content}}
+                </tab> 
+            </tabset>
+          </div>
+        </div>
+        <div class="panel panel-default panel-primary">
+        <div class="panel-heading">Wiki</div>
+          <div class="panel-body">
+            <div ng-controller="TabsWikiCtrl">
+              <tabset> 
+                  <tab heading="Print page"></tab>
+                  <tab heading="Copy page"></tab> 
+              </tabset>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="col-md-4">
+  <div class="col-md-3">
+    <h4>Displaying generation log file</h4>
     <div style="height: 600px; background-color: #00FFFF"></div>
   </div>
   <div class="col-md-4">
+    <h4>Deliverables listing</h4>
     <div style="height: 600px; background-color: #88FFFF"></div>
   </div>
 </div>

@@ -9,6 +9,18 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
   });
 }])
 
+.controller('TabsGenerateCtrl', function ($scope, $window) { 
+  $scope.tabs = [
+    { title:'X1.1', content:'D.X.1.1 Open Specs' },
+    { title:'X3.1', content:'D.X.3.1 Installation and Admin Guides' },
+    { title:'X4.1', content:'D.X.4.1 User and Programmers Guides' },
+    { title:'X5.1', content:'D.X.5.1 Unit Testing Plan and Reports ' }
+  ];
+})
+
+.controller('TabsWikiCtrl', function ($scope, $window) { 
+})
+
 .controller('DeliverablesCtl', ['$scope', '$http', '$timeout', '$sce', function($scope, $http, $timeout, $sce) {
 
     var devel_url = "http://localhost:5000"
