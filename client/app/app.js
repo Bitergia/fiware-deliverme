@@ -14,7 +14,8 @@ config(['$routeProvider', function($routeProvider) {
 }]);
 
 app.run(function($rootScope, $location, $http) {
-    $rootScope.loggedInUser = null
+    // $rootScope.loggedInUser = null
+    $rootScope.loggedInUser = true
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
         if ($rootScope.loggedInUser == null) {
           // no logged user, redirect to /login
