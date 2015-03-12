@@ -24,7 +24,7 @@ angular.module('deliverMe.auth', ['ngRoute'])
         var url = 'http://127.0.0.1:5000/';
         var api = "api/login"
 
-        $http({method:'GET',url:url+api+"/"+data})
+        $http({method:'GET',url:url+api+"?"+data})
         .success(function(data,status,headers,config){
             console.log("Logging ok");
             $rootScope.loggedInUser = true;
