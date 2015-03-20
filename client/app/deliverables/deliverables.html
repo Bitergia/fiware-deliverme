@@ -46,8 +46,30 @@
           <div class="panel-body">
             <div ng-controller="TabsWikiCtrl">
               <tabset> 
-                  <tab heading="Print page"></tab>
-                  <tab heading="Copy page"></tab> 
+                  <tab heading="Print page">
+                  <form class="form-horizontal" style="margin-top: 5px">
+                   <div class="form-group">
+                      <label for="lprojects" class="col-sm-4 control-label">Project</label>
+                      <div class="col-sm-8">
+                        <select name="dproject" ng-model="dproject" class="form-control">
+                          <option ng-repeat="name in projects">{{name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="ndeliver" class="col-sm-4 control-label">Page name</label>
+                      <div class="col-sm-8">
+                        <input type="text" ng-model="dpage" class="form-control" id="ndeliver">
+                      </div>
+                    </div>
+                     <div class="form-group">
+                      <div class="col-sm-offset-4 col-sm-8">
+                        <button type="submit" ng-click="deliver_me()" class="btn btn-default">Deliver Me</button>
+                      </div>
+                    </div>
+                    </form>
+                  </tab>
+                  <tab heading="Copy page"></tab>
               </tabset>
             </div>
           </div>
@@ -68,7 +90,7 @@
   <div class="col-md-4">
     <h4>Deliverables listing</h4>
     <div style="height: 600px; background-color: #88FFFF">
-        <iframe style="width:100%; height:100%" src="http://projects.bitergia.com/grimoire-dashboard/browser/data/json/"></iframe>
+        <iframe style="width:100%; height:100%" src="http://larsjung.de/h5ai/demo/"></iframe>
     </div>
   </div>
 </div>
