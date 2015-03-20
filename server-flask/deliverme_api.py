@@ -19,7 +19,7 @@
 # Authors:
 #   Alvaro del Castillo <acs@bitergia.com>
 
-import crypt, json, logging, sys, traceback
+import crypt, json, logging, subprocess, sys, traceback
 from os import path, listdir, getcwd
 
 from flask import Flask, request, Response, abort
@@ -45,6 +45,17 @@ def check_login(user, passwd):
         traceback.print_exc(file=sys.stdout)
     return check
 
+def generate_deliverable(project, page):
+    tool = "../wikitool/bin/wikitool"
+    deliverables_dir = "deliverables"
+    cmd = "PYTHONPATH=../wikitool/"
+    args = "%s -d %s %s %s" % (tool, deliverables_dir, project, page)
+
+    # p = subprocess.Popen([cmd, args], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # out, err = p.communicate()
+    res = subprocess.call(cmd + " " + args, shell = True)
+    return res
+
 @app.route("/api/login",methods = ['GET'])
 def login():
     """ Check login for the user """
@@ -58,11 +69,20 @@ def login():
     else:
         abort(401)
 
-@app.route("/api/deliverables/<dashboard>",methods = ['GET'])
-def create_deliverable(deliverable):
+@app.route("/api/deliverable",methods = ['GET'])
+def create_deliverable():
     """ Create the deliverable and return a URL to access it """
-    deliverable_url = ""
-    return deliverable_url
+    res = ""
+    project = request.args.get('project')
+    page = request.args.get('page')
+    logging.info("Generating deliverable for %s in page %s" % (project, page))
+
+    res = generate_deliverable(project, page)
+
+    if res == 1: # probs exit code 1
+        res = Response("Problems generating the deliverable ", status=502)
+
+    return res
 
 @app.route("/api/deliverables",methods = ['GET'])
 def get_dashboards():
