@@ -18,12 +18,12 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
   ];
 })
 
-.controller('TabsWikiCtrl', function ($scope, $window) { 
-})
-
 .controller('DeliverablesCtl', ['$scope', '$http', '$timeout', '$sce', function($scope, $http, $timeout, $sce) {
 
     var devel_url = "http://localhost:5000"
+    $scope.auth = function() {
+        var test;
+    }
 
     $scope.load_deliverables = function(dash_name) {
         var url = devel_url + '/api/deliverables'+'/'+dash_name
@@ -37,17 +37,12 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     $scope.select_dash = function() {
         // Select a dash loading all its deliverables
         $scope.load_deliverables($scope.dash_selected.name);
-    }
+    };
 
     $scope.create_deliverable = function() {
         // Create a deliverable using the project and wiki page selected
         console.log("Creating deliverable ...");
-    }
-
-    $scope.deliver_me = function() {
-        // Create a deliverable using the project and wiki page selected
-        console.log("Delivering for project " + $scope.dproject + "the page " + $scope.dpage);
-    }
+    };
 
     $scope.load_deliverables = function() {
         var url = devel_url + '/api/deliverables'
@@ -55,8 +50,30 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         $http.get(url).success(function(data) {
             $scope.deliverables = data;
         });
-    }
+    };
 
+    $scope.deliver_me = function() {
+        // Create a deliverable using the project and wiki page selected
+        console.log("Delivering for project " + $scope.deliver.project + " the page " + $scope.deliver.page);
+
+        var data = 'project='+$scope.deliver.project;
+        data += '&page='+$scope.deliver.page;
+
+        // TODO: Move to a secure URL once in production
+        var url = 'http://127.0.0.1:5000/';
+        var api = "api/deliverable"
+
+        $http({method:'GET',url:url+api+"?"+data})
+        .success(function(data, status, headers, config){
+            console.log("Deliverable generated " + data);
+        }).
+        error(function(data,status,headers,config){
+          console.log("Probs generating deliverable  " + data);
+          $scope.error = data;
+        });
+    };
+    // https://github.com/angular-ui/bootstrap/wiki/FAQ#my-input--select-element-doesnt-work-as-expected-inside-the-tab--accordion-directive
+    $scope.deliver = {"project":"","page":""};
     $scope.load_deliverables();
     $scope.dash_selected = {name:""};
     $scope.projects = ["fiware","fi-ware-review","testbed","apps","cloud","data","i2nd","iot","security","miwi","tools","exploitation","fi-ware-private"];
