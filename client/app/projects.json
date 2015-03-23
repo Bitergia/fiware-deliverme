@@ -1,0 +1,15 @@
+{
+ "fiware":["f1","f2"],
+ "fi-ware-review":["fr1","fr2"],
+ "testbed":["d1","d2"],
+ "apps":["d1","d2"],
+ "cloud":["d1","d2"],
+ "data":["d1","d2"],
+ "i2nd":["d1","d2"],
+ "iot":["d1","d2"],
+ "security":["d1","d2"],
+ "miwi":["d1","d2"],
+ "tools":["d1","d2"],
+ "exploitation":["d1","d2"],
+ "fi-ware-private":["d1","d2"]
+ }

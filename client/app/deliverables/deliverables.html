@@ -1,9 +1,26 @@
+<div class="row">
 <div style="margin-bottom: 10px;">This page allows administration of files
   and can run commands in order to create generated FI-WARE deliverables. Please
   use the Links provided in order to invoke tasks Please bear in mind, this page
   asks no questions, if you press a button, it will get executed. The tooltips
   (mouseover) should hopefully guide you through... But: you should know what
   you are doing, otherwise please contact fiware@bitergia.com</div>
+</div>
+
+<div class="row">
+  <div data-ng-show="error != '' && error != undefined"
+    class="alert alert-danger alert-dismissable">
+    <button type="button" class="close" data-ng-click="error = undefined"
+      aria-hidden="true">&times;</button>
+    <strong>Can not generate the deliverable: {{error}}.</strong>
+  </div>
+  <div data-ng-show="error == ''"
+    class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-ng-click="error = undefined"
+      aria-hidden="true">&times;</button>
+    <strong>Deliverable generated.</strong> URL
+  </div>
+</div>
 
 <div class="row">
   <div class="col-md-4">
@@ -51,15 +68,17 @@
                    <div class="form-group">
                       <label for="lprojects" class="col-sm-4 control-label">Project</label>
                       <div class="col-sm-8">
-                        <select name="dproject" ng-model="deliver.project" class="form-control">
-                          <option ng-repeat="name in projects">{{name}}</option>
+                        <select name="dproject" ng-model="deliver.project" ng-change="select_project()" class="form-control">
+                          <option ng-repeat="(key, data) in projects">{{key}}</option>
                         </select>
                       </div>
                     </div>
                     <div class="form-group">
                       <label for="ndeliver" class="col-sm-4 control-label">Page name</label>
                       <div class="col-sm-8">
-                        <input type="text" ng-model="deliver.page" class="form-control" id="ndeliver">
+                        <select ng-model="deliver.page" ng-change="select_deliverable()" class="form-control">
+                          <option ng-repeat="deliverable in project_deliverables">{{deliverable}}</option>
+                        </select>
                       </div>
                     </div>
                      <div class="form-group">
