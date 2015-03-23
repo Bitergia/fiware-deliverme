@@ -78,6 +78,8 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         $http({method:'GET',url:url+api+"?"+data})
         .success(function(data, status, headers, config){
             console.log("Deliverable generated " + data);
+            $scope.error = '';
+            $scope.deliverable_url = data;
         }).
         error(function(data,status,headers,config){
           console.log("Probs generating deliverable  " + data);

@@ -20,7 +20,7 @@
 #   Alvaro del Castillo <acs@bitergia.com>
 
 import crypt, json, logging, subprocess, sys, traceback
-from os import path, listdir, getcwd
+from os import environ, path, listdir, getcwd
 
 from flask import Flask, request, Response, abort
 
@@ -46,15 +46,18 @@ def check_login(user, passwd):
     return check
 
 def generate_deliverable(project, page):
-    tool = "../wikitool/bin/wikitool"
+    tool_dir = "/home/acs/devel/fiware-deliverme/server-flask"
+    tool = tool_dir + "/../wikitool/bin/wikitool"
     deliverables_dir = "deliverables"
-    cmd = "PYTHONPATH=../wikitool/"
-    args = "%s -d %s %s %s" % (tool, deliverables_dir, project, page)
+    cmd = "%s -d %s %s %s" % (tool, deliverables_dir, project, page)
 
-    # p = subprocess.Popen([cmd, args], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    # out, err = p.communicate()
-    res = subprocess.call(cmd + " " + args, shell = True)
-    return res
+    print cmd
+    p = subprocess.Popen([cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                         shell = True, env=dict(environ, PYTHONPATH="../wikitool"))
+
+    out, err = p.communicate()
+
+    return out + "\n" + err
 
 @app.route("/api/login",methods = ['GET'])
 def login():
