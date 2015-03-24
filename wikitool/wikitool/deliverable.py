@@ -23,18 +23,21 @@
 #http://docs.python-requests.org/en/latest/user/advanced/
 from BeautifulSoup import BeautifulSoup
 import requests
+import tempfile
 import os
+import zipfile
 
 #http://forge.fiware.org/plugins/mediawiki/wiki/fi-ware-private/index.php?title=D.6.1.3_FI-WARE_GE_Open_Specifications_front_page
 class PackDeliverable(object):
-    def __init__(self, wikiname, page_name, user, password, dest_dir):
-        self.root_url = self._composeRootURL(wikiname, page_name)
-        self.page_name = page_name
-        self.user = user
-        self.password = password
-        self.dest_dir = dest_dir
-        self.html_file_name = page_name + '.html'
-        self.html_img_dir = page_name + '_images'
+    def __init__(self, args):
+        self.root_url = self._composeRootURL(args.wiki_name, args.page_name)
+        self.page_name = args.page_name
+        self.user = args.wiki_user #useless
+        self.password = args.wiki_password #useless
+        self.dest_dir = args.dest_dir
+        self.html_file_name = args.page_name + '.html'
+        self.html_img_dir = args.page_name + '_images'
+        self.compress = args.compress
         self.login_url = 'https://forge.fiware.org/account/login.php'
         self.soup = None
         self.html = ''
@@ -60,6 +63,11 @@ class PackDeliverable(object):
         img_path = '/'.join(['.',self.dest_dir,self.html_img_dir])
         if not os.path.exists(img_path):
             os.makedirs(img_path)
+
+    def zipdir(self, path, zip):
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                zip.write(os.path.join(root, file))
 
     def handle_images(self, session):
         self.create_dir()
@@ -127,7 +135,7 @@ class PackDeliverable(object):
     def compose(self):
         session = self.connect()
         payload = {'title':self.page_name, 'printable':'yes'}
-        r = session.get(self.root_url, params=payload, verify=False)
+        r = session.get(self.root_url, params=payload, verify=False) #useless
         print("Main page being parsed ... ")
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
@@ -135,7 +143,7 @@ class PackDeliverable(object):
         lpages = self.get_linked_pages()
         for lp in lpages:
             payload = {'title':lp, 'printable':'yes'}
-            print("Downloading page: %s" % lp)
+            print("Including page: %s" % lp)
             r = session.get(self.root_url, params=payload)
             self.html = self.html + r.content
 
@@ -144,6 +152,18 @@ class PackDeliverable(object):
         self.handle_images(session)
         self.filter_out()
         self.dump_content()
+        if (self.compress):
+
+            zip_file_name = self.page_name + '.zip'
+            zip_file_path = '/'.join(['.',self.dest_dir, zip_file_name])
+            html_file_path = '/'.join(['.',self.dest_dir,self.html_file_name])
+            img_dir_path = '/'.join(['.', self.dest_dir, self.html_img_dir])
+
+            zipf = zipfile.ZipFile(zip_file_path, 'w')
+            zipf.write(html_file_path)
+            self.zipdir(img_dir_path, zipf)
+            zipf.close()
+            print("Zip file generated with name %s" % (zip_file_path))
 
         print("-> Done!")
 
