@@ -123,11 +123,10 @@ class PackDeliverable(object):
             if (res!=None and res !=-1):
                 res2 = cur.findAll('a')
                 for r in res2:
-                    #print ">>> " + unicode(r)
                     href = r['href']
                     aux_pname = href[href.rfind('/')+1:]
-                    #print "--- " + aux_pname
-                    page_names.append(aux_pname)
+                    if (len(aux_pname)>0):
+                        page_names.append(aux_pname)
             cur = cur.nextSibling
 
         return page_names
