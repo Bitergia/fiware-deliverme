@@ -127,7 +127,7 @@ class PackDeliverable(object):
     def compose(self):
         session = self.connect()
         payload = {'title':self.page_name, 'printable':'yes'}
-        r = session.get(self.root_url, params=payload)
+        r = session.get(self.root_url, params=payload, verify=False)
         print("Main page being parsed ... ")
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
