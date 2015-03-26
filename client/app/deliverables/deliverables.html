@@ -97,10 +97,14 @@
     </div>
   </div>
   <div class="col-md-4">
-    <h4>Displaying generation log file</h4>
-    <div>
+    <h4>Displaying generation process</h4>
+    <div data-ng-show="progress_deliver>0">
+      <progressbar class="progress-striped" animate="true"
+        max="100" value="progress_deliver" type="info">
+      </progressbar>
       <div class="alert alert-info" role="alert" style="font-size: small">
-      <a href="">fiware_forge_generate_book.rb -c -h testbed D.10.4.1.FI-WARE_Integration_Report_front_page</a>
+      {{creation_log}}
+      <!-- fiware_forge_generate_book.rb -c -h testbed D.10.4.1.FI-WARE_Integration_Report_front_page  -->
       <br>
       running ...
       </div>
