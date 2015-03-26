@@ -60,7 +60,7 @@ class PackDeliverable(object):
     def create_dir(self):
         if not os.path.exists(self.dest_dir):
             os.makedirs(self.dest_dir)
-        img_path = '/'.join(['.',self.dest_dir,self.html_img_dir])
+        img_path = '/'.join([self.dest_dir,self.html_img_dir])
         if not os.path.exists(img_path):
             os.makedirs(img_path)
 
@@ -78,7 +78,7 @@ class PackDeliverable(object):
             img_src = 'https://forge.fiware.org' + img.get('src')
             img_name = img_src[img_src.rfind('/')+1:]
             aux = session.get(img_src)
-            img_path = '/'.join(['.', self.dest_dir, self.html_img_dir, img_name])
+            img_path = '/'.join([self.dest_dir, self.html_img_dir, img_name])
             with open(img_path, "wb") as code:
                 code.write(aux.content)
 
@@ -101,7 +101,7 @@ class PackDeliverable(object):
                 t.extract()
 
     def dump_content(self):
-        path = '/'.join(['.',self.dest_dir,self.html_file_name])
+        path = '/'.join([self.dest_dir,self.html_file_name])
         fd = open(path, 'w')
         fd.write(self.soup.prettify())
         fd.close()
@@ -154,9 +154,9 @@ class PackDeliverable(object):
         if (self.compress):
 
             zip_file_name = self.page_name + '.zip'
-            zip_file_path = '/'.join(['.',self.dest_dir, zip_file_name])
-            html_file_path = '/'.join(['.',self.dest_dir,self.html_file_name])
-            img_dir_path = '/'.join(['.', self.dest_dir, self.html_img_dir])
+            zip_file_path = '/'.join([self.dest_dir, zip_file_name])
+            html_file_path = '/'.join([self.dest_dir,self.html_file_name])
+            img_dir_path = '/'.join([self.dest_dir, self.html_img_dir])
 
             zipf = zipfile.ZipFile(zip_file_path, 'w')
             zipf.write(html_file_path)
