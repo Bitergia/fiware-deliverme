@@ -14,12 +14,6 @@ config(['$routeProvider', function($routeProvider) {
 }]);
 
 app.run(function($rootScope, $location, $http) {
-    if (!window.location.origin) {
-        // Support IE
-        window.location.origin  = window.location.protocol + "//" + window.location.hostname;
-        window.location.origin += (window.location.port ? ':' + window.location.port: '');
-    }
-
     $rootScope.loggedInUser = null
     $rootScope.loggedInUser = true
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
