@@ -21,8 +21,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 .controller('DeliverablesCtl', ['$scope', '$http', '$timeout', '$sce', function($scope, $http, $timeout, $sce) {
 
     var devel_url = window.location.href;
-    var devel_url_path = window.location.pathname;
-    devel_url = devel_url.substring(0,devel_url.indexOf(devel_url_path))
+    devel_url = devel_url.split("/static")[0];
     $scope.auth = function() {
         var test;
     }
@@ -55,7 +54,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     };
 
     $scope.load_projects = function() {
-        var url = devel_url + '/static/app/' + '/projects.json'
+        var url = devel_url + '/static/app/' + 'projects.json'
         console.log(url);
         $http.get(url).success(function(data) {
             $scope.projects = data;
