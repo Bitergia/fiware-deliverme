@@ -20,7 +20,7 @@
 #   Alvaro del Castillo <acs@bitergia.com>
 
 import crypt, json, logging, subprocess, sys, traceback
-from os import environ, path, listdir, getcwd
+from os import environ, path, listdir, getcwd, makedirs
 
 from flask import Flask, request, Response, abort
 
@@ -46,14 +46,29 @@ def check_login(user, passwd):
     return check
 
 def generate_deliverable(project, page):
-    tool_dir = "/home/acs/devel/fiware-deliverme/server-flask"
-    tool = tool_dir + "/../wikitool/bin/wikitool"
-    deliverables_dir = "deliverables"
-    cmd = "%s -d %s %s %s" % (tool, deliverables_dir, project, page)
+    deliverme_dir = "/home/acs/devel/fiware-deliverme"
+    deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
+    # Move to apache later
+    deliverables_dir = deliverme_dir + "/server-flask/static/deliverables"
+    tool_dir = deliverme_dir + "/wikitool"
+    tool = tool_dir + "/bin/wikitool"
+
+    # Check output dir exists
+    if not path.isdir(deliverables_dir):
+        makedirs(deliverables_dir)
+    # Get WP name from deliverable name
+    # D.X.Y -> WPX.Y	
+    aux = page.split(".")
+    wp_name = "WP"+aux[1]+"."+aux[2]
+    wp_dir = deliverables_dir+"/"+wp_name
+    if not path.isdir(wp_dir):
+        makedirs(wp_dir)
+
+    cmd = "%s -d \"%s\" %s %s -z" % (tool, wp_dir, project, page)
 
     print cmd
     p = subprocess.Popen([cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         shell = True, env=dict(environ, PYTHONPATH="../wikitool"))
+                         shell = True, env=dict(environ, PYTHONPATH=tool_dir))
 
     out, err = p.communicate()
 

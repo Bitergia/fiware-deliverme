@@ -1,6 +1,6 @@
 {
  "fiware":["f1","f2"],
- "fi-ware-review":["fr1","fr2"],
+ "fi-ware-review":["D.6.1.3_FI-WARE_GE_Open_Specifications_front_page","fr2"],
  "testbed":["d1","d2"],
  "apps":["d1","d2"],
  "cloud":["d1","d2"],
@@ -11,5 +11,5 @@
  "miwi":["d1","d2"],
  "tools":["d1","d2"],
  "exploitation":["d1","d2"],
- "fi-ware-private":["d1","d2"]
+ "fi-ware-private":["D.6.1.3_FI-WARE_GE_Open_Specifications_front_page","d2"]
  }
