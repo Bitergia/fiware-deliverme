@@ -20,7 +20,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 
 .controller('DeliverablesCtl', ['$scope', '$http', '$timeout', '$sce', function($scope, $http, $timeout, $sce) {
 
-    var devel_url = "http://localhost:5000"
+    var devel_url = window.location.origin;
     $scope.auth = function() {
         var test;
     }
@@ -45,7 +45,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     };
 
     $scope.load_deliverables = function() {
-        var url = devel_url + '/api/deliverables'
+        var url =  devel_url + '/api/deliverables'
         console.log(url);
         $http.get(url).success(function(data) {
             $scope.deliverables = data;
@@ -93,5 +93,4 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     $scope.load_deliverables();
     $scope.load_projects();
     $scope.dash_selected = {name:""};
-    // $scope.projects = ["fiware","fi-ware-review","testbed","apps","cloud","data","i2nd","iot","security","miwi","tools","exploitation","fi-ware-private"];
 }]);
