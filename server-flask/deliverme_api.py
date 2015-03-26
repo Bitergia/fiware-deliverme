@@ -50,6 +50,7 @@ def generate_deliverable(project, page):
     deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
     # Move to apache later
     deliverables_dir = deliverme_dir + "/server-flask/static/deliverables"
+    deliverables_dir = "/var/www/deliverme/deliverables"
     tool_dir = deliverme_dir + "/wikitool"
     tool = tool_dir + "/bin/wikitool"
 
