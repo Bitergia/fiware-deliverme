@@ -23,7 +23,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-5">
     <h4>Actions</h4>
     <!--  <div style="height: 600px; background-color: #00AAFF"> -->
     <div style="height: 750px">
@@ -87,6 +87,11 @@
                       </div>
                     </div>
                     </form>
+                    <div data-ng-show="progress_deliver>0">
+                      <progressbar class="progress-striped" animate="true"
+                        max="100" value="progress_deliver" type="info">
+                      </progressbar>
+                  </div>
                   </tab>
                   <tab heading="Copy page"></tab>
               </tabset>
@@ -96,24 +101,10 @@
       </div>
     </div>
   </div>
-  <div class="col-md-4">
-    <h4>Displaying generation process</h4>
-    <div data-ng-show="progress_deliver>0">
-      <progressbar class="progress-striped" animate="true"
-        max="100" value="progress_deliver" type="info">
-      </progressbar>
-      <div class="alert alert-info" role="alert" style="font-size: small">
-      {{creation_log}}
-      <!-- fiware_forge_generate_book.rb -c -h testbed D.10.4.1.FI-WARE_Integration_Report_front_page  -->
-      <br>
-      running ...
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4">
+  <div class="col-md-7">
     <h4>Deliverables listing</h4>
     <div style="height: 600px; background-color: #88FFFF">
-        <iframe style="width:100%; height:100%" src="http://agua.bitergia.net/deliverme/deliverables/"></iframe>
+        <iframe style="width:100%; height:100%" id="explorer" src="http://agua.bitergia.net/deliverme/deliverables/"></iframe>
     </div>
   </div>
 </div>
