@@ -66,6 +66,9 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     };
 
     $scope.deliver_me = function() {
+        $scope.progress_deliver = 0;
+        $scope.error = undefined;
+        $scope.creation_log = null ;
         // Create a deliverable using the project and wiki page selected
         console.log("Delivering for project " + $scope.deliver.project + " the page " + $scope.deliver.page);
 
@@ -80,6 +83,8 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         var aux = $scope.deliver.page.split(".");
         var wp_name = "WP"+aux[1]+"."+aux[2];
         var deliverables_url = devel_url + "/deliverables/" + wp_name;
+        // Go to general folder until the deliverable is generated
+        document.getElementById('deliverables_explorer').src = devel_url + "/deliverables/";
 
         // 60s for generating the deliverable, show progress_bar
         var creation_timer = $interval(function() {
@@ -96,6 +101,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
             // Reload deliverables browser
             $scope.deliverable_url = deliverables_url;
             $scope.creation_log = data;
+            document.getElementById('deliverables_explorer').src = deliverables_url;
         }).
         error(function(data,status,headers,config){
           console.log("Probs generating deliverable  " + data);
