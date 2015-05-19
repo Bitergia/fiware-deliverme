@@ -27,6 +27,14 @@ import tempfile
 import os
 import zipfile
 
+#  watch out!!, this is to avoid the following warning
+# /usr/lib/python2.7/dist-packages/urllib3/connectionpool.py:770: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
+#  InsecureRequestWarning)
+import urllib3
+urllib3.disable_warnings()
+#
+
+
 #http://forge.fiware.org/plugins/mediawiki/wiki/fi-ware-private/index.php?title=D.6.1.3_FI-WARE_GE_Open_Specifications_front_page
 class PackDeliverable(object):
     def __init__(self, args):
@@ -138,15 +146,18 @@ class PackDeliverable(object):
         print("Main page being parsed ... ")
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
+        [x.extract() for x in self.soup.findAll('script')]
 
         lpages = self.get_linked_pages()
         for lp in lpages:
             payload = {'title':lp, 'printable':'yes'}
             print("Including page: %s" % lp)
             r = session.get(self.root_url, params=payload)
-            self.html = self.html + r.content
+            auxsoap = BeautifulSoup(r.content)
+            [x.extract() for x in auxsoap.findAll('script')]
+            self.soup.body.append(auxsoap.body.find("div",{"id": "globalWrapper"}))
 
-        self.soup = BeautifulSoup(self.html) #we overwrite the soup
+        #self.soup = BeautifulSoup(self.html) #we overwrite the soup
 
         self.handle_images(session)
         self.filter_out()
