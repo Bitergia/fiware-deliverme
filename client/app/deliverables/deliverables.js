@@ -18,7 +18,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
   ];
 })
 
-.controller('DeliverablesCtl', ['$scope', '$http', '$timeout', '$sce', function($scope, $http, $timeout, $sce) {
+.controller('DeliverablesCtl', ['$scope', '$http', '$interval', '$sce', function($scope, $http, $interval, $sce) {
 
     var devel_url = window.location.href;
     devel_url = devel_url.split("/static")[0];
@@ -66,6 +66,9 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     };
 
     $scope.deliver_me = function() {
+        $scope.progress_deliver = 0;
+        $scope.error = undefined;
+        $scope.creation_log = null ;
         // Create a deliverable using the project and wiki page selected
         console.log("Delivering for project " + $scope.deliver.project + " the page " + $scope.deliver.page);
 
@@ -74,13 +77,31 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 
         // TODO: Move to a secure URL once in production
         var url = devel_url;
-        var api = "/api/deliverable"
+        var api = "/api/deliverable";
+        // Get WP name from deliverable name
+        // D.X.Y -> WPX.Y
+        var aux = $scope.deliver.page.split(".");
+        var wp_name = "WP"+aux[1]+"."+aux[2];
+        var deliverables_url = devel_url + "/deliverables/" + wp_name;
+        // Go to general folder until the deliverable is generated
+        document.getElementById('deliverables_explorer').src = devel_url + "/deliverables/";
+
+        // 60s for generating the deliverable, show progress_bar
+        var creation_timer = $interval(function() {
+            $scope.progress_deliver += 1;
+        }, 500);
 
         $http({method:'GET',url:url+api+"?"+data})
         .success(function(data, status, headers, config){
+            // Complete progressbar
+            $interval.cancel(creation_timer);
+            $scope.progress_deliver = 100;
             console.log("Deliverable generated " + data);
             $scope.error = '';
-            $scope.deliverable_url = data;
+            // Reload deliverables browser
+            $scope.deliverable_url = deliverables_url;
+            $scope.creation_log = data;
+            document.getElementById('deliverables_explorer').src = deliverables_url;
         }).
         error(function(data,status,headers,config){
           console.log("Probs generating deliverable  " + data);
@@ -93,5 +114,5 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     $scope.error = undefined;
     $scope.load_deliverables();
     $scope.load_projects();
-    $scope.dash_selected = {name:""};
+    $scope.progress_deliver = 0;
 }]);
