@@ -148,6 +148,11 @@ class PackDeliverable(object):
         self.soup = BeautifulSoup(self.html)
         [x.extract() for x in self.soup.findAll('script')]
 
+        matches = self.soup.body.findAll("div", { "class" : "noarticletext" })
+        if (len(matches) > 0):
+            import sys
+            sys.exit('No article page found')
+
         lpages = self.get_linked_pages()
         for lp in lpages:
             payload = {'title':lp, 'printable':'yes'}
