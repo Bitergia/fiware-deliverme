@@ -8,102 +8,84 @@
 </div>
 
 <div class="row">
-  <div data-ng-show="error != '' && error != undefined"
-    class="alert alert-danger alert-dismissable">
-    <button type="button" class="close" data-ng-click="error = undefined"
-      aria-hidden="true">&times;</button>
-    <strong>Can not generate the deliverable: {{error}}.</strong>
-  </div>
-  <div data-ng-show="error == ''"
-    class="alert alert-success alert-dismissable">
-    <button type="button" class="close" data-ng-click="error = undefined"
-      aria-hidden="true">&times;</button>
-    <strong>Deliverable generated: {{deliverable_url}}</strong>
-  </div>
-</div>
-
-<div class="row">
   <div class="col-md-5">
-    <h4>Actions</h4>
     <!--  <div style="height: 600px; background-color: #00AAFF"> -->
-    <div style="height: 750px">
-      <div class="panel panel-default panel-primary">
-        <div class="panel-heading">WP10</div>
-        <div class="panel-body">
-        <ul>
-        <li><a href="">Generate D10.4.1 (testbed wiki)</a></li>
-        <li><a href="">Generate D10.5.1 (fi-ware-review)</a></li>
-        </ul> 
-        </div>
-      </div>
-      <div style="height:250px" class="panel panel-default panel-primary">
-        <div class="panel-heading">D.X.1.1 Open Specs</div>
-        <div class="panel-body">
-          <div ng-controller="TabsGenerateCtrl">
-            <tabset> 
-                <tab heading="X1.1">
-                  D.X.1.1 Open Specs
-                  <ul>
-                    <li><a href="">Generate D3.1.1b</a></li>
-                    <li>Generate D4.1.1b</li>
-                    <li>Generate D5.1.1b</li>
-                    <li>Generate D6.1.1b</li>
-                    <li>Generate D7.1.1b</li>
-                    <li>Generate D8.1.1b</li>
-                  </ul>
-                </tab> 
-                <tab ng-repeat="tab in tabs" heading="{{tab.title}}"
-                    active="tab.active" disabled="tab.disabled"> {{tab.content}}
-                </tab> 
-            </tabset>
-          </div>
-        </div>
-        <div class="panel panel-default panel-primary">
-        <div class="panel-heading">Wiki</div>
-          <div class="panel-body">
-            <div>
-              <tabset> 
-                  <tab heading="Print page">
-                  <form class="form-horizontal" style="margin-top: 5px">
-                   <div class="form-group">
-                      <label for="lprojects" class="col-sm-4 control-label">Project</label>
-                      <div class="col-sm-8">
-                        <select name="dproject" ng-model="deliver.project" ng-change="select_project()" class="form-control">
-                          <option ng-repeat="(key, data) in projects">{{key}}</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="ndeliver" class="col-sm-4 control-label">Page name</label>
-                      <div class="col-sm-8">
-                        <select ng-model="deliver.page" ng-change="select_deliverable()" class="form-control">
-                          <option ng-repeat="deliverable in project_deliverables">{{deliverable}}</option>
-                        </select>
-                      </div>
-                    </div>
-                     <div class="form-group">
-                      <div class="col-sm-offset-4 col-sm-8">
-                        <button type="submit" style="background: #aaFFaa" ng-click="deliver_me()" class="btn btn-default">Deliver Me</button>
-                      </div>
-                    </div>
-                    </form>
-                    <div data-ng-show="progress_deliver>0">
-                      <progressbar class="progress-striped" animate="true"
-                        max="100" value="progress_deliver" type="info">
-                      </progressbar>
+    <div class="panel panel-default panel-primary">
+    <div class="panel-heading">Wiki</div>
+      <div class="panel-body">
+        <div>
+          <tabset>
+              <tab heading="Print page">
+              <form name="myForm" class="form-horizontal" style="margin-top: 5px">
+               <div class="form-group">
+                  <label for="lprojects" class="col-sm-4 control-label">Project</label>
+                  <div class="col-sm-8">
+                    <select name="dproject" ng-model="deliver.project" ng-change="select_project()" class="form-control">
+                      <option ng-repeat="(key, data) in projects">{{key}}</option>
+                    </select>
                   </div>
-                  </tab>
-                  <tab heading="Copy page"></tab>
-              </tabset>
-            </div>
-          </div>
+                </div>
+                <div class="form-group">
+                  <label for="ndeliver" class="col-sm-4 control-label">Page name</label>
+                  <div class="col-sm-8">
+                      <input type="text" class="form-control" name="page" ng-model="deliver.page" /><br />
+                  </div>
+                  <!--<div role="alert">
+                      <span class="error" ng-show="myForm.page.$error.required">
+                          Required!</span>
+                  </div>-->
+                </div>
+                 <div class="form-group">
+                  <div class="col-sm-offset-4 col-sm-8">
+                    <button type="submit" style="background: #aaFFaa" ng-click="deliver_me()" class="btn btn-default">Generate</button>
+                  </div>
+                </div>
+                </form>
+                <div data-ng-show="progress_deliver>0">
+                  <progressbar class="progress-striped" animate="true"
+                    max="100" value="progress_deliver" type="info">
+                  </progressbar>
+              </div>
+              </tab>
+              <tab heading="Copy page"></tab>
+          </tabset>
         </div>
       </div>
-    </div>
+
+      </div>
+
+      <div class="row">
+        <div data-ng-show="error != '' && error != undefined"
+          class="alert alert-danger alert-dismissable col-sm-12">
+          <button type="button" class="close" data-ng-click="error = undefined"
+            aria-hidden="true">&times;</button>
+          <strong>Can not generate the deliverable: {{error}}.</strong>
+        </div>
+        <div data-ng-show="error == ''"
+          class="alert alert-success alert-dismissable col-sm-12">
+          <button type="button" class="close" data-ng-click="error = undefined"
+            aria-hidden="true">&times;</button>
+          <strong>Deliverable generated: <a href="{{deliverable_url_index}}"> {{deliver.page}} </a></strong>
+        </div>
+      </div>
+
   </div>
   <div class="col-md-7">
+    <div class="panel panel-default panel-primary">
+        <div class="panel-heading">Last deliverables generated</div>
+        <div class="panel-body">
+            <ul ng-controller="MyCtrl">
+                <li ng-repeat="l in data.entries| orderBy:'-time'|limitTo:10">
+                    <a href="https://forge.fiware.org/plugins/mediawiki/wiki/{{l.project}}/index.php/{{l.page}}">{{l.page}}</a>&nbsp;
+                    <a href="{{l.time}}/{{l.page}}.zip"><i class="fa fa-file-archive-o"></i>(.zip)</a>&nbsp;
+                        <a href="{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.time}}
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <h4>Deliverables listing</h4>
-    <div style="height: 600px; background-color: #88FFFF">
+    <div style="height: 400px; background-color: #88FFFF">
         <iframe style="width:100%; height:100%" id="deliverables_explorer" src="http://agua.bitergia.net/deliverme/deliverables/"></iframe>
     </div>
   </div>

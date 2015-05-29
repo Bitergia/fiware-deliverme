@@ -20,7 +20,7 @@
 #   Alvaro del Castillo <acs@bitergia.com>
 
 import crypt, json, logging, subprocess, sys, traceback
-from os import environ, path, listdir, getcwd, makedirs
+from os import environ, path, listdir, getcwd, makedirs, rmdir
 
 from flask import Flask, request, Response, abort
 
@@ -45,33 +45,61 @@ def check_login(user, passwd):
         traceback.print_exc(file=sys.stdout)
     return check
 
-def generate_deliverable(project, page):
+def write_log(project, page, time, user):
+    import json
+    json_file = "./static/log/log.json"
+    mydict = {"project":project, "page": page, "time": time, "user":user}
+
+    with open(json_file) as f:
+        data = json.load(f)
+    data["entries"].append(mydict)
+
+    with open(json_file, 'w') as f:
+        json.dump(data, f)
+
+def generate_deliverable(project, page, date):
     # deliverme_dir = "/home/acs/devel/fiware-deliverme"
-    deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
+    deliverme_dir = "../"
     # Move to apache later
     deliverables_dir = deliverme_dir + "/server-flask/static/deliverables"
-    deliverables_dir = "/var/www/deliverme/deliverables"
+    #deliverables_dir = "/var/www/deliverme/deliverables"
     tool_dir = deliverme_dir + "/wikitool"
     tool = tool_dir + "/bin/wikitool"
 
     # Check output dir exists
     if not path.isdir(deliverables_dir):
         makedirs(deliverables_dir)
-    # Get WP name from deliverable name
-    # D.X.Y -> WPX.Y	
-    aux = page.split(".")
-    wp_name = "WP"+aux[1]+"."+aux[2]
-    wp_dir = deliverables_dir+"/"+wp_name
+
+    try:
+        # Get WP name from deliverable name
+        # D.X.Y -> WPX.Y
+        aux = page.split(".")
+        wp_name = "WP"+aux[1]+"."+aux[2]
+        wp_dir = deliverables_dir+"/"+wp_name
+    except:
+        raise PackageNameError("foobar")
+
+    #date_dir = date.replace('/','_').replace(':','_').replace(' ','__')
+    wp_dir = wp_dir + '/' + date
     if not path.isdir(wp_dir):
         makedirs(wp_dir)
 
     cmd = "%s -d \"%s\" %s %s -z" % (tool, wp_dir, project, page)
+    print("\n")
+    print(cmd)
+    print("\n")
 
     print cmd
     p = subprocess.Popen([cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                         shell = True, env=dict(environ, PYTHONPATH=tool_dir))
+                     shell = True, env=dict(environ, PYTHONPATH=tool_dir))
 
     out, err = p.communicate()
+
+    if (str(err).rfind("No article page found") >= 0):
+        rmdir(wp_dir)
+        raise NoArticleFound("foobar")
+
+    write_log(project, page, date, "anonymous")
 
     return out + "\n" + err
 
@@ -94,12 +122,18 @@ def create_deliverable():
     res = ""
     project = request.args.get('project')
     page = request.args.get('page')
-    logging.info("Generating deliverable for %s in page %s" % (project, page))
+    date = request.args.get('date')
+    logging.info("Generating deliverable for %s in page %s at %s" % (project, page, date))
 
-    res = generate_deliverable(project, page)
+    try:
+        res = generate_deliverable(project, page, date)
+    except PackageNameError:
+        res = Response("\n Wrong page name. \n It should be similar to D.6.1.3_FI-WARE_GE_Open_Specifications_front_page", status=502)
+    except NoArticleFound:
+        res = Response("\n There is currently no text in the wiki page you included. Are you sure that wiki page exists?", status=502)
 
-    if res == 1: # probs exit code 1
-        res = Response("Problems generating the deliverable ", status=502)
+    #if res == 1: # probs exit code 1
+    #    res = Response("Problems generating the deliverable ", status=502)
 
     return res
 
@@ -109,6 +143,18 @@ def get_dashboards():
     deliverables_path = '.'
     deliverables = [f for f in listdir(deliverables_path) if path.isfile(f) and f.endswith('.zip')]
     return json.dumps(deliverables)
+
+class PackageNameError(Exception):
+     def __init__(self, value):
+         self.value = value
+     def __str__(self):
+         return repr(self.value)
+
+class NoArticleFound(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
 
 if __name__ == "__main__":
     app.debug = True
