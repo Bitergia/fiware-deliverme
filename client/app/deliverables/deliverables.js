@@ -44,7 +44,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 
             var deferred = $q.defer();
             var devel_url = window.location.origin;
-            var url = devel_url + '/static/log/' + 'log.json';
+            var url = devel_url + '/deliverme/static/log/' + 'log.json';
 
             $timeout(function() {
                 $http.get(url).success(function(data) {
@@ -147,8 +147,9 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         // D.X.Y -> WPX.Y
         var aux = $scope.deliver.page.split(".");
         var wp_name = "WP"+aux[1]+"."+aux[2];
-        var deliverables_url = devel_url + "/static/deliverables/" + wp_name + '/' + str_date;
-        var deliverables_url_index = deliverables_url + '/' + $scope.deliver.page + '.html';
+        //var deliverables_url = devel_url + "/static/deliverables/" + wp_name + '/' + str_date;
+        var deliverables_url = devel_url + "/deliverables/" + wp_name;
+        var deliverables_url_index = devel_url + "/static/deliverables/" + wp_name + '/' + str_date + '/' + $scope.deliver.page + '.html';
         // Go to general folder until the deliverable is generated
         document.getElementById('deliverables_explorer').src = devel_url + "/deliverables/";
 

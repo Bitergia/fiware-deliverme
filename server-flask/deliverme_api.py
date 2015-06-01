@@ -47,7 +47,7 @@ def check_login(user, passwd):
 
 def write_log(project, page, time, user):
     import json
-    json_file = "./static/log/log.json"
+    json_file = "/home/lcanas/repos/fiware-deliverme/server-flask/static/log/log.json"
     mydict = {"project":project, "page": page, "time": time, "user":user}
 
     with open(json_file) as f:
@@ -59,7 +59,8 @@ def write_log(project, page, time, user):
 
 def generate_deliverable(project, page, date):
     # deliverme_dir = "/home/acs/devel/fiware-deliverme"
-    deliverme_dir = "../"
+    #deliverme_dir = "../"
+    deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
     # Move to apache later
     deliverables_dir = deliverme_dir + "/server-flask/static/deliverables"
     #deliverables_dir = "/var/www/deliverme/deliverables"
@@ -159,4 +160,4 @@ class NoArticleFound(Exception):
 if __name__ == "__main__":
     app.debug = True
     logging.basicConfig(level=logging.INFO,format='%(asctime)s %(message)s')
-    app.run()
+    app.run(host='0.0.0.0')
