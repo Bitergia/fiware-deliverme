@@ -21,7 +21,7 @@
 #
 
 #http://docs.python-requests.org/en/latest/user/advanced/
-from BeautifulSoup import BeautifulSoup
+from BeautifulSoup import BeautifulSoup, Comment
 import requests
 import tempfile
 import os
@@ -31,7 +31,7 @@ import zipfile
 # /usr/lib/python2.7/dist-packages/urllib3/connectionpool.py:770: InsecureRequestWarning: Unverified HTTPS request is being made. Adding certificate verification is strongly advised. See: https://urllib3.readthedocs.org/en/latest/security.html
 #  InsecureRequestWarning)
 import urllib3
-urllib3.disable_warnings()
+#urllib3.disable_warnings()
 #
 
 
@@ -72,10 +72,10 @@ class PackDeliverable(object):
         if not os.path.exists(img_path):
             os.makedirs(img_path)
 
-    def zipdir(self, path, zip):
+    def zipdir(self, path, relative_path, zip):
         for root, dirs, files in os.walk(path):
             for file in files:
-                zip.write(os.path.join(root, file))
+                zip.write(os.path.join(root, file), relative_path + "/" + file)
 
     def handle_images(self, session):
         self.create_dir()
@@ -147,6 +147,9 @@ class PackDeliverable(object):
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
         [x.extract() for x in self.soup.findAll('script')]
+        [y.extract() for y in self.soup.findAll('link')]
+        comments = self.soup.findAll(text=lambda text:isinstance(text, Comment))
+        [comment.extract() for comment in comments]
 
         matches = self.soup.body.findAll("div", { "class" : "noarticletext" })
         if (len(matches) > 0):
@@ -158,9 +161,12 @@ class PackDeliverable(object):
             payload = {'title':lp, 'printable':'yes'}
             print("Including page: %s" % lp)
             r = session.get(self.root_url, params=payload)
-            auxsoap = BeautifulSoup(r.content)
-            [x.extract() for x in auxsoap.findAll('script')]
-            self.soup.body.append(auxsoap.body.find("div",{"id": "globalWrapper"}))
+            auxsoup = BeautifulSoup(r.content)
+            [x.extract() for x in auxsoup.findAll('script')]
+            [y.extract() for y in auxsoup.findAll('link')]
+            comments = auxsoup.findAll(text=lambda text:isinstance(text, Comment))
+            [comment.extract() for comment in comments] 
+            self.soup.body.append(auxsoup.body.find("div",{"id": "globalWrapper"}))
 
         #self.soup = BeautifulSoup(self.html) #we overwrite the soup
 
@@ -172,11 +178,11 @@ class PackDeliverable(object):
             zip_file_name = self.page_name + '.zip'
             zip_file_path = '/'.join([self.dest_dir, zip_file_name])
             html_file_path = '/'.join([self.dest_dir,self.html_file_name])
-            img_dir_path = '/'.join([self.dest_dir, self.html_img_dir])
+            img_root_dir_path = '/'.join([self.dest_dir, self.html_img_dir])
 
             zipf = zipfile.ZipFile(zip_file_path, 'w')
-            zipf.write(html_file_path)
-            self.zipdir(img_dir_path, zipf)
+            zipf.write(html_file_path, self.html_file_name)
+            self.zipdir(img_root_dir_path, self.html_img_dir, zipf)
             zipf.close()
             print("Zip file generated with name %s" % (zip_file_path))
 
