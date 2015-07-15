@@ -35,7 +35,15 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 .controller('MyCtrl', function($scope, webtest) {
     webtest.fetch().then(function(data) {
         $scope.data = data;
-    })
+        //we record also the WP name to build the URL
+        angular.forEach($scope.data.entries, function (value,key){
+            var aux = '',
+                wp_name = '';
+            aux = value.page.split(".");
+            wp_name = "WP"+aux[1]+"."+aux[2];
+            value.wp = wp_name;            
+        });
+    });
 })
 
 .factory('webtest', function($q, $timeout, $http) {
@@ -43,8 +51,10 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         fetch: function(callback) {
 
             var deferred = $q.defer();
-            var devel_url = window.location.origin;
-            var url = devel_url + '/deliverme/static/log/' + 'log.json';
+            //var devel_url = window.location.origin;
+            var devel_url = window.location.href;
+            devel_url = devel_url.split("/static")[0];
+            var url = devel_url + '/static/log/' + 'log.json';
 
             $timeout(function() {
                 $http.get(url).success(function(data) {
