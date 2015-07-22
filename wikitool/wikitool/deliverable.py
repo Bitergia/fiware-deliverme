@@ -139,6 +139,18 @@ class PackDeliverable(object):
 
         return page_names
 
+    def replace_headings(self, text):
+        r = range(1,10)
+        r.reverse()
+        for index in r:
+            a = '<h' + str(index)
+            b = '<h' + str(index+1)
+            text = text.replace(a, b)
+            c = '</h' + str(index)
+            d = '</h' + str(index+1)
+            text = text.replace(c, d)
+        return text
+
     def compose(self):
         session = self.connect()
         payload = {'title':self.page_name, 'printable':'yes'}
@@ -161,11 +173,12 @@ class PackDeliverable(object):
             payload = {'title':lp, 'printable':'yes'}
             print("Including page: %s" % lp)
             r = session.get(self.root_url, params=payload)
-            auxsoup = BeautifulSoup(r.content)
+            page_content = self.replace_headings(r.content)
+            auxsoup = BeautifulSoup(page_content)
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
             comments = auxsoup.findAll(text=lambda text:isinstance(text, Comment))
-            [comment.extract() for comment in comments] 
+            [comment.extract() for comment in comments]
             self.soup.body.append(auxsoup.body.find("div",{"id": "globalWrapper"}))
 
         #self.soup = BeautifulSoup(self.html) #we overwrite the soup
