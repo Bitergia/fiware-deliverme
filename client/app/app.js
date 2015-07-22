@@ -13,6 +13,7 @@ config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/login'});
 }]);
 
+
 app.run(function($rootScope, $location, $http) {
     $rootScope.loggedInUser = null
     $rootScope.loggedInUser = true

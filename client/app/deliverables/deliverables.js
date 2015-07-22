@@ -2,6 +2,7 @@
 
 angular.module('deliverMe.deliverables', ['ngRoute'])
 
+
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/deliverables', {
     templateUrl: 'deliverables/deliverables.html',
@@ -41,7 +42,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
                 wp_name = '';
             aux = value.page.split(".");
             wp_name = "WP"+aux[1]+"."+aux[2];
-            value.wp = wp_name;            
+            value.wp = wp_name;
         });
     });
 })

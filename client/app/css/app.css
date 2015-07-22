@@ -34,3 +34,10 @@
     padding-left: 25px;
     padding-right: 25px;
 }
+
+/*Change the size here*/
+.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+    font-size: 14px;
+}
