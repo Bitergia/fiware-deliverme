@@ -111,7 +111,8 @@ class PackDeliverable(object):
     def dump_content(self):
         path = '/'.join([self.dest_dir,self.html_file_name])
         fd = open(path, 'w')
-        fd.write(self.soup.prettify())
+        content = self.soup.prettify()
+        fd.write(content.encode("UTF-8"))
         fd.close()
 
     def get_linked_pages(self):
@@ -183,6 +184,15 @@ class PackDeliverable(object):
             mytag['class'] = mainheader['class']
             mainheader.replace_with(mytag)
 
+            # we remove the heading for the text 
+            # <h4 id="siteSub">
+            # From FIWARE Forge Wiki
+            # </h4>
+            forge_text = auxsoup.findAll('h4',{'id':'siteSub'})[0]
+            ptag = auxsoup.new_tag('p')
+            ptag.string = forge_text.string
+            forge_text.replace_with(ptag)
+
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
             comments = auxsoup.findAll(text=lambda text:isinstance(text, Comment))
@@ -209,4 +219,4 @@ class PackDeliverable(object):
 
         print("-> Done!")
 
-        session.close()
+        #session.close()
