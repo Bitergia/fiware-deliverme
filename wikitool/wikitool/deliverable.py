@@ -193,6 +193,9 @@ class PackDeliverable(object):
             ptag.string = forge_text.string
             forge_text.replace_with(ptag)
 
+            forge_big_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
+            forge_text.replace_with(ptag)
+
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
             comments = auxsoup.findAll(text=lambda text:isinstance(text, Comment))
