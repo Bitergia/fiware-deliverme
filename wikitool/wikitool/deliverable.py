@@ -21,7 +21,7 @@
 #
 
 #http://docs.python-requests.org/en/latest/user/advanced/
-from BeautifulSoup import BeautifulSoup, Comment
+from bs4 import BeautifulSoup, Comment
 import requests
 import tempfile
 import os
@@ -175,6 +175,14 @@ class PackDeliverable(object):
             r = session.get(self.root_url, params=payload)
             page_content = self.replace_headings(r.content)
             auxsoup = BeautifulSoup(page_content)
+
+            ## we restore the style of the first header
+            mainheader = auxsoup.findAll('h2',{'id':'firstHeading'})[0]
+            mytag = auxsoup.new_tag('h1')
+            mytag.string = mainheader.string
+            mytag['class'] = mainheader['class']
+            mainheader.replace_with(mytag)
+
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
             comments = auxsoup.findAll(text=lambda text:isinstance(text, Comment))
