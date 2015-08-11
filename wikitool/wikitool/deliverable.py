@@ -159,6 +159,12 @@ class PackDeliverable(object):
         print("Main page being parsed ... ")
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
+
+        forge_big_text = self.soup.findAll('h3',{'id':'siteSub'})[0]
+        ptag = self.soup.new_tag('p')
+        ptag.string = forge_big_text.string
+        forge_big_text.replace_with(ptag)
+
         [x.extract() for x in self.soup.findAll('script')]
         [y.extract() for y in self.soup.findAll('link')]
         comments = self.soup.findAll(text=lambda text:isinstance(text, Comment))
@@ -191,9 +197,6 @@ class PackDeliverable(object):
             forge_text = auxsoup.findAll('h4',{'id':'siteSub'})[0]
             ptag = auxsoup.new_tag('p')
             ptag.string = forge_text.string
-            forge_text.replace_with(ptag)
-
-            forge_big_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
             forge_text.replace_with(ptag)
 
             [x.extract() for x in auxsoup.findAll('script')]
