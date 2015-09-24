@@ -191,10 +191,10 @@ class PackDeliverable(object):
             mainheader.replace_with(mytag)
 
             # we remove the heading for the text 
-            # <h4 id="siteSub">
+            # <h3 id="siteSub">
             # From FIWARE Forge Wiki
-            # </h4>
-            forge_text = auxsoup.findAll('h4',{'id':'siteSub'})[0]
+            # </h3>
+            forge_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
             ptag = auxsoup.new_tag('p')
             ptag.string = forge_text.string
             forge_text.replace_with(ptag)
