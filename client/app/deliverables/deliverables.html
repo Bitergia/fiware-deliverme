@@ -83,7 +83,7 @@
                 <li ng-repeat="l in data.entries| orderBy:'-time'|limitTo:10">
                     <a href="https://forge.fiware.org/plugins/mediawiki/wiki/{{l.project}}/index.php/{{l.page}}">{{l.page}}</a>&nbsp;
                     <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.zip"><i class="fa fa-file-archive-o"></i>(.zip)</a>&nbsp;
-                        <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.time}}
+                        <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.prettytime}}
                 </li>
             </ul>
         </div>

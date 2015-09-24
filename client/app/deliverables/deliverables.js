@@ -75,6 +75,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
                     aux = value.page.split(".");
                     wp_name = "WP"+aux[1]+"."+aux[2];
                     value.wp = wp_name;
+                    value.prettytime = value.time.replace('_',' ');
                 });
 
           // Your code here
