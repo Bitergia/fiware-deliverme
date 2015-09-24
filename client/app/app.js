@@ -14,7 +14,7 @@ config(['$routeProvider', function($routeProvider) {
 }]);
 
 
-app.run(function($rootScope, $location, $http) {
+app.run(function($rootScope, $location, $http, $timeout) {
     $rootScope.loggedInUser = null
     $rootScope.loggedInUser = true
     $rootScope.$on("$routeChangeStart", function(event, next, current) {

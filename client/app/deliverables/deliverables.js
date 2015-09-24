@@ -18,22 +18,8 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     { title:'X5.1', content:'D.X.5.1 Unit Testing Plan and Reports ' }
   ];
 })
-/*
-.controller('LogCtrl', function($scope, $http){
-    $scope.load_log = function() {
-        var devel_url = window.location.origin;
-        var url = devel_url + '/static/log/' + 'log.json';
-        console.log(url);
-        $http.get(url).success(function(data) {
-            $scope.log = data;
-        });
-    };
 
-    $scope.load_log();
-
-})*/
-
-.controller('MyCtrl', function($scope, webtest) {
+.controller('MyCtrl2', function($scope, webtest) {
     webtest.fetch().then(function(data) {
         $scope.data = data;
         //we record also the WP name to build the URL
@@ -68,6 +54,44 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     };
 
     return Webtest;
+})
+
+
+.controller('MyCtrl', function($scope, $http, $timeout) {
+    // Function to get the data
+    $scope.getData = function(){
+        var devel_url = window.location.href;
+        devel_url = devel_url.split("/static")[0];
+        var url = devel_url + '/static/log/' + 'log.json';
+        // we avoid cache for this file
+        url = url + '?nocache=' + (new Date()).getTime();
+        $http.get(url)
+            .success(function(data, status, headers, config) {
+                $scope.data = data;
+                //we record also the WP name to build the URL
+                angular.forEach($scope.data.entries, function (value,key){
+                    var aux = '',
+                        wp_name = '';
+                    aux = value.page.split(".");
+                    wp_name = "WP"+aux[1]+"."+aux[2];
+                    value.wp = wp_name;
+                });
+
+          // Your code here
+          console.log('Fetched data!');
+        });
+    };
+
+    // Function to replicate setInterval using $timeout service.
+    $scope.intervalFunction = function(){
+        $timeout(function() {
+            $scope.getData();
+            $scope.intervalFunction();
+        }, 3000)
+    };
+
+    // Kick off the interval
+    $scope.intervalFunction();
 })
 
 .controller('DeliverablesCtl', ['$scope', '$http', '$interval', '$sce', function($scope, $http, $interval, $sce) {
