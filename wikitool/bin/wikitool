@@ -27,11 +27,13 @@ from wikitool.deliverable import PackDeliverable
 def main():
     args = parse_args()
 
-    try:
+    """try:
         pd = PackDeliverable(args)
         pd.compose()
     except Exception, e:
-        raise RuntimeError(str(e))
+        raise RuntimeError(str(e))"""
+    pd = PackDeliverable(args)
+    pd.compose()
 
 def parse_args():
     parser = ArgumentParser(usage="Usage: '%(prog)s [options] <wiki_name> <page_name>")
