@@ -17,8 +17,6 @@
               <form name="myForm" class="form-horizontal" style="margin-top: 5px">
                <div class="form-group">
                   <label for="lprojects" class="col-sm-4 control-label">
-                      <i class="fa fa-question-circle" data-toggle="tooltip" id="example"
-                      tooltip="Example: fiware-private-wiki in http://forge.fiware.org/plu../wiki/fi-ware-private"></i>
                       Project</label>
                   <div class="col-sm-8">
                     <select name="dproject" ng-model="deliver.project" ng-change="select_project()" class="form-control">
@@ -28,8 +26,6 @@
                 </div>
                 <div class="form-group">
                   <label for="ndeliver" class="col-sm-4 control-label">
-                      <i class="fa fa-question-circle" data-toggle="tooltip" id="example2"
-                      tooltip="Example: 'D34.1.3_Test' in https://forge.fiware.org/.../index.php/D34.1.3_Test"></i>
                       Page name</label>
                   <div class="col-sm-8">
                       <input type="text" class="form-control" name="page" ng-model="deliver.page" /><br />
@@ -38,7 +34,44 @@
                       <span class="error" ng-show="myForm.page.$error.required">
                           Required!</span>
                   </div>-->
-                </div>
+                <!--</div>-->
+                <div class="col-sm-4"></div>
+                <div class="col-sm-8">
+                    <div ng-controller="ModalDemoCtrl">
+                    <script type="text/ng-template" id="myModalContent.html">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Tips to fulfill the form</h3>
+                            </div>
+                            <div class="modal-body">
+                                <center><img src="img/1stfield.png"></img></center>
+                                <br/>
+                                <p>The field <strong>Project</strong> identifies the wiki name where the initial page is.</p>
+
+                                <p>In our example, for the URL below the wiki name is: <i>fiware</i>
+                                https://forge.fiware.org/plugins/mediawiki/wiki/<strong>fiware</strong>/index.php/D.6.4.3_User_and_Programmers_Guide_front_page
+                                </p>
+                                <br/>
+                                <hr/>
+                                <br/>
+                                <center><img src="img/2ndfield.png"></img></center>
+                                <br/>
+                                <p>The parameter <strong>Page name</strong> is the end of the URL where the cover is located</p>
+
+                                <p>In our example, for the URL below the page name is: <i>D.6.4.3_User_and_Programmers_Guide_front_page</i>
+                                https://forge.fiware.org/plugins/mediawiki/wiki/fiware/index.php/<strong>D.6.4.3_User_and_Programmers_Guide_front_page</strong>
+                                </p>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+                            </div>
+                        </script>
+
+                        <p>Do you need <a href="index.html#/deliverables" ng-click="open('lg')">some help?</a></p>
+                        <!--<span type="button" class="btn btn-default" ng-click="open('lg')">Large modal</span>-->
+                    </div>
+
+                </div></div>
                  <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
                     <button type="submit" style="background: #aaFFaa" ng-click="deliver_me()" class="btn btn-default">Generate</button>
