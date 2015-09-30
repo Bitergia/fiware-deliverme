@@ -123,7 +123,8 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
                     aux = value.page.split(".");
                     wp_name = "WP"+aux[1]+"."+aux[2];
                     value.wp = wp_name;
-                    value.prettytime = value.time.replace('_',' ');
+                    var auxtime = value.time.split('_');
+                    value.prettytime = auxtime[0] + ' ' + auxtime[1].replace(/-/g, ':');
                 });
 
           // Your code here
@@ -143,13 +144,26 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
     $scope.intervalFunction();
 })
 
-.controller('DeliverablesCtl', ['$scope', '$http', '$interval', '$sce', function($scope, $http, $interval, $sce) {
+.controller('DeliverablesCtl', ['$scope', '$http', '$interval', '$sce', 'AuthService',
+                                function($scope, $http, $interval, $sce, AuthService) {
 
     var devel_url = window.location.href;
     devel_url = devel_url.split("/static")[0];
+
+    $scope.logout = function () {
+        AuthService.logout(function () {
+            window.location = "/static/app/index.html#/login"
+        });
+    };
+
     $scope.auth = function() {
         var test;
-    }
+    };
+
+    $scope.$watch( AuthService.isLoggedIn, function ( isLoggedIn ) {
+        $scope.isLoggedIn = isLoggedIn;
+        $scope.currentUser = AuthService.currentUser();
+    });
 
     $scope.load_log = function() {
         var devel_url = window.location.origin;

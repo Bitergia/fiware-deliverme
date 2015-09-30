@@ -1,40 +1,58 @@
 <div class="row">
+  <div class="col-md-12 text-center">
+      <img src="./img/kitchen-toaster-150px.png"/>
+  </div>
+  <div class="col-md-12 text-center">
+      <h2 class="form-signin-heading">Please sign in</h2>
+  </div>
   <div class="col-md-12">
     <!-- Login box -->
     <div class="row" style="max-width: 400px; margin: 0 auto;">
-      <div class="panel panel-default panel-primary">
-        <div class="panel-heading">Login</div>
+      <!--<div class="panel panel-default panel-primary">
+        <div class="panel-heading">Please sign in</div>-->
         <div class="panel-body">
           <!-- Login box -->
           <div class="row">
-            <div class="col-md-4">User</div>
+              <div class="col-md-1"></div>
+              <div class="col-md-10">
+             <label for="inputId" class="sr-only">User name</label>
+             <input type="text" id="inputId" class="form-control" placeholder="User name" ng-model="user" required autofocus>
+            </div>
+             <div class="col-md-1"></div>
+            <!--<div class="col-md-4">User</div>
             <div class="col-md-8">
               <input ng-model="user">
-            </div>
-          </div>
+          </div>-->
+        </div>
           <div class="row" style="margin-top: 10px">
-            <div class="col-md-4">Password</div>
+            <!--<div class="col-md-4">Password</div>
             <div class="col-md-8">
               <input type="password" ng-model="password">
-            </div>
-          </div>
+          </div>-->
+          <div class="col-md-1"></div>
+          <div class="col-md-10">
+          <label for="inputPassword" class="sr-only">Password</label>
+          <input type="password" id="inputPassword" class="form-control" placeholder="Password" ng-model="password" required>
+        </div>
+          <div class="col-md-1"></div>
+
+        </div>
           <div class="row" style="margin-top: 20px;">
-            <div class="col-md-5"></div>
-            <div class="col-md-2">
+            <div class="col-md-12">
               <button data-ng-show="loggedInUser != true" ng-click="auth()"
-                type="submit" class="btn btn-primary">Login</button>
+                type="submit" class="btn btn-lg btn-primary btn-block">Sign in</button>
               <i data-ng-show="auth_result == 'process'"
                 class="fa fa-spinner fa-spin fa-3x"></i>
             </div>
-            <div class="col-md-5"></div>
           </div>
         </div>
         <div data-ng-show="auth_result == 'error'"
           class="alert alert-danger alert-dismissable">
           <button type="button" class="close" data-ng-click="auth_result = ''"
             aria-hidden="true">&times;</button>
-          <strong>Can not login: check your user (email) and password
-            and try again.</strong>
+          <strong>Your login information was incorrect. Check your user
+              and password (same user and password you use for the forge)
+              and try again.</strong>
         </div>
         <div data-ng-show="auth_result == 'ok'"
           class="alert alert-success alert-dismissable">
@@ -43,7 +61,7 @@
           <strong>Login ok.</strong>
         </div>
       </div>
-    </div>
+    <!--</div>-->
   </div>
   <!-- End Login box -->
   <!-- User info box -->

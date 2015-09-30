@@ -1,8 +1,14 @@
 <div class="row">
-<div style="margin-bottom: 10px;">This page allows administration of files
+  <div class="col-md-10" style="margin-bottom: 10px;">This page allows administration of files
   and can run commands in order to create generated FI-WARE deliverables. Please
   use the Links provided in order to invoke tasks Please bear in mind, this page
   asks no questions, if you press a button, it will get executed.</div>
+  <div class="col-md-2">
+      <p class="text-right"><i class="fa fa-user"></i> You are logged as <i>{{currentUser}}</i>
+      <!--<button type="submit" style="background: #aaFFaa" ng-click="logout()" class="btn btn-default">Log out</button>-->
+      <a id="link-1" href ng-click="logout()">( log out )</a>
+      </p>
+  </div>
 </div>
 
 <div class="row">
@@ -15,6 +21,7 @@
           <tabset>
               <tab heading="Generate deliverable">
               <form name="myForm" class="form-horizontal" style="margin-top: 5px">
+               <input type="hidden" name="username" ng-value="currentUser" />
                <div class="form-group">
                   <label for="lprojects" class="col-sm-4 control-label">
                       Project</label>
@@ -74,7 +81,7 @@
                 </div></div>
                  <div class="form-group">
                   <div class="col-sm-offset-4 col-sm-8">
-                    <button type="submit" style="background: #aaFFaa" ng-click="deliver_me()" class="btn btn-default">Generate</button>
+                    <button type="submit" style="background: #aaFFaa" ng-click="deliver_me()" class="btn btn-default">Generate deliverable</button>
                   </div>
                 </div>
                 </form>
@@ -113,7 +120,7 @@
         <div class="panel-heading">Last deliverables generated</div>
         <div class="panel-body">
             <ul ng-controller="MyCtrl">
-                <li ng-repeat="l in data.entries| orderBy:'-time'|limitTo:10">
+                <li ng-repeat="l in data.entries| orderBy:'-time'|limitTo:15">
                     <a href="https://forge.fiware.org/plugins/mediawiki/wiki/{{l.project}}/index.php/{{l.page}}">{{l.page}}</a>&nbsp;
                     <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.zip"><i class="fa fa-file-archive-o"></i>(.zip)</a>&nbsp;
                         <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.prettytime}}

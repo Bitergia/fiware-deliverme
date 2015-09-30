@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('deliverMe.auth', ['ngRoute'])
+angular.module('deliverMe.auth', ['ngRoute','ngStorage'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/login', {
@@ -9,8 +9,8 @@ angular.module('deliverMe.auth', ['ngRoute'])
   });
 }])
 
-.controller('AuthCtrl', ['$scope', '$rootScope', '$location', '$http', 'GlobalContextService',
-                         function($scope, $rootScope, $location, $http, GlobalContextService) {
+.controller('AuthCtrl', ['$scope', '$rootScope', '$location', '$http', '$localStorage', 'AuthService',
+                         function($scope, $rootScope, $location, $http, $localStorage, AuthService) {
 
     // Use login, password get auth_token from server
     $scope.user = '';
@@ -29,11 +29,14 @@ angular.module('deliverMe.auth', ['ngRoute'])
             console.log("Logging ok");
             $rootScope.loggedInUser = true;
             $location.path("/deliverables");
+            $localStorage.token = data.token;
+            //AuthService.setUser();
         }).
         error(function(data,status,headers,config){
           $scope.auth_result = "error";
           console.log(data);
+          // Erase the token if the user fails to log in
+          delete $localStorage.token;
         });
     };
-
 }]);

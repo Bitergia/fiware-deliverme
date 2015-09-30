@@ -1,8 +1,8 @@
 {
-  "name": "deliverMe App client",
-  "description": "FIWARE Deliverables Tool",
-  "version": "0.0.0",
-  "homepage": "https://github.com/acs/fiware-deliverme",
+  "name": "FIWARE Deliverable Toaster",
+  "description": "FIWARE Deliverable Toaster",
+  "version": "0.1",
+  "homepage": "https://github.com/Bitergia/fiware-deliverme",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -11,6 +11,8 @@
     "angular-loader": "1.2.x",
     "angular-mocks": "~1.2.x",
     "angular-bootstrap": "0.12.x",
-    "html5-boilerplate": "~4.3.0"
+    "fontawesome": "4.3.0",
+    "html5-boilerplate": "~4.3.0",
+    "ngstorage": "0.3.9"
   }
 }
