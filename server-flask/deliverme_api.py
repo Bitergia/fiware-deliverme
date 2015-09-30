@@ -19,7 +19,9 @@
 # Authors:
 #   Alvaro del Castillo <acs@bitergia.com>
 
-import crypt, json, logging, subprocess, sys, traceback
+import crypt, json, logging, subprocess, sys, traceback, jwt
+from datetime import datetime
+from datetime import timedelta
 from os import environ, path, listdir, getcwd, makedirs, rmdir
 
 from flask import Flask, request, Response, abort
@@ -45,6 +47,27 @@ def check_login(user, passwd):
         traceback.print_exc(file=sys.stdout)
     return check
 
+def gen_token(username, password):
+    return jwt.encode({username: password}, 'elperrodesanroquenotiener4b0', algorithm='HS256')
+
+def create_token(username):
+    payload = {
+        # subject
+        'sub': username,
+        #issued at
+        'iat': datetime.utcnow(),
+        #expiry
+        'exp': datetime.utcnow() + timedelta(days=1)
+    }
+
+    token = jwt.encode(payload, 'elperrodesanroquenotiener4b0', algorithm='HS256')
+    return token.decode('unicode_escape')
+
+def parse_token(req):
+    token = req.headers.get('Authorization').split()[1]
+    return jwt.decode(token, 'elperrodesanroquenotiener4b0', algorithms='HS256')
+
+
 def write_log(project, page, time, user):
     import json
     json_file = "/home/lcanas/repos/fiware-deliverme/server-flask/static/log/log.json"
@@ -57,7 +80,7 @@ def write_log(project, page, time, user):
     with open(json_file, 'w') as f:
         json.dump(data, f)
 
-def generate_deliverable(project, page, date):
+def generate_deliverable(project, page, date, username):
     # deliverme_dir = "/home/acs/devel/fiware-deliverme"
     #deliverme_dir = "../"
     deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
@@ -100,7 +123,7 @@ def generate_deliverable(project, page, date):
         rmdir(wp_dir)
         raise NoArticleFound("foobar")
 
-    write_log(project, page, date, "anonymous")
+    write_log(project, page, date, username)
 
     return out + "\n" + err
 
@@ -113,7 +136,8 @@ def login():
     passwd = request.args.get('password')
 
     if check_login(user, passwd):
-        return ""
+        res = {'token':create_token(user)}
+        return json.dumps(res)
     else:
         abort(401)
 
@@ -124,10 +148,12 @@ def create_deliverable():
     project = request.args.get('project')
     page = request.args.get('page')
     date = request.args.get('date')
-    logging.info("Generating deliverable for %s in page %s at %s" % (project, page, date))
+    username = request.args.get('username')
+
+    logging.info("Generating deliverable for %s in page %s at %s by user %s" % (project, page, date, username))
 
     try:
-        res = generate_deliverable(project, page, date)
+        res = generate_deliverable(project, page, date, username)
     except PackageNameError:
         res = Response("\n Wrong page name. \n It should be similar to D.6.1.3_FI-WARE_GE_Open_Specifications_front_page", status=502)
     except NoArticleFound:
