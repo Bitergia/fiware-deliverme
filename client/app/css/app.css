@@ -1,4 +1,10 @@
 /* app css stylesheet */
+body {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  background-color: #eee;
+  font: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
 
 .menu {
   list-style: none;
@@ -40,4 +46,8 @@
     max-width: 350px;
     width: 350px;
     font-size: 14px;
+}
+
+.navbar {
+    padding: 10px 0 0 20px;
 }
