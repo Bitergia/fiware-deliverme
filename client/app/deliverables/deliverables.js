@@ -237,6 +237,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
         var data = 'project='+$scope.deliver.project;
         data += '&page='+$scope.deliver.page;
         data += '&date='+str_date;
+	data += '&username='+AuthService.currentUser();
 
         // TODO: Move to a secure URL once in production
         var url = devel_url;
