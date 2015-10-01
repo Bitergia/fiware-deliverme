@@ -122,8 +122,8 @@
             <ul ng-controller="MyCtrl">
                 <li ng-repeat="l in data.entries| orderBy:'-time'|limitTo:15">
                     <a href="https://forge.fiware.org/plugins/mediawiki/wiki/{{l.project}}/index.php/{{l.page}}">{{l.page}}</a>&nbsp;
-                    <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.zip"><i class="fa fa-file-archive-o"></i>(.zip)</a>&nbsp;
-                        <a href="/deliverme/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.prettytime}}
+                    <a href="/dtoaster/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.zip"><i class="fa fa-file-archive-o"></i>(.zip)</a>&nbsp;
+                        <a href="/dtoaster/deliverables/{{l.wp}}/{{l.time}}/{{l.page}}.html"><i class="fa fa-file-text-o"></i>(.html)</a> ({{l.project}}) by {{l.user}} on {{l.prettytime}}
                 </li>
             </ul>
         </div>
@@ -131,7 +131,7 @@
 
     <h4>Deliverables listing</h4>
     <div style="height: 400px; background-color: #88FFFF">
-        <iframe style="width:100%; height:100%" id="deliverables_explorer" src="http://agua.bitergia.net/deliverme/deliverables/"></iframe>
+        <iframe style="width:100%; height:100%" id="deliverables_explorer" src="https://forge.fiware.org/dtoaster/deliverables/"></iframe>
     </div>
   </div>
 </div>

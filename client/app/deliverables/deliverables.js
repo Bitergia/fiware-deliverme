@@ -152,7 +152,7 @@ angular.module('deliverMe.deliverables', ['ngRoute'])
 
     $scope.logout = function () {
         AuthService.logout(function () {
-            window.location = "/static/app/index.html#/login"
+            window.location = "/dtoaster/static/app/index.html#/login"
         });
     };
 
