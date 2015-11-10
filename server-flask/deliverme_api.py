@@ -70,7 +70,7 @@ def parse_token(req):
 
 def write_log(project, page, time, user):
     import json
-    json_file = "/home/luis/repos/fiware-deliverme/server-flask/static/log/log.json"
+    json_file = "/home/lcanas/repos/fiware-deliverme/server-flask/static/log/log.json"
     mydict = {"project":project, "page": page, "time": time, "user":user}
 
     with open(json_file) as f:
@@ -83,7 +83,7 @@ def write_log(project, page, time, user):
 def generate_deliverable(project, page, date, username):
     # deliverme_dir = "/home/acs/devel/fiware-deliverme"
     #deliverme_dir = "../"
-    deliverme_dir = "/home/luis/repos/fiware-deliverme"
+    deliverme_dir = "/home/lcanas/repos/fiware-deliverme"
     # Move to apache later
     deliverables_dir = deliverme_dir + "/server-flask/static/deliverables"
     #deliverables_dir = "/var/www/deliverme/deliverables"
@@ -134,12 +134,11 @@ def login():
     # If not modifying the client could be enough to get access to the service
     user = request.args.get('username')
     passwd = request.args.get('password')
-    logging.info("FIXME 1")
+
     if check_login(user, passwd):
         res = {'token':create_token(user)}
         return json.dumps(res)
     else:
-        logging.info("Incorrect user and/or password: %s:%s" % (user, passwd))
         abort(401)
 
 @app.route("/api/deliverable",methods = ['GET'])

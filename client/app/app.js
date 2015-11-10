@@ -26,9 +26,7 @@ app.run(function($rootScope, $location, $http, $timeout, AuthService) {
           } else {
             $location.path("/login");
           }
-      }else{
-          $location.path("/deliverables");
-      }
+        }
     });
 });
 
