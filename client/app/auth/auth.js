@@ -21,8 +21,8 @@ angular.module('deliverMe.auth', ['ngRoute','ngStorage'])
         data += '&password='+$scope.password;
 
         // TODO: Move to a secure URL once in production
-        // var url = 'http://127.0.0.1:5000/';
-	var url = 'https://forge.fiware.org/dtoaster/';
+        var url = 'http://127.0.0.1:5000/';
+	    //var url = 'https://forge.fiware.org/dtoaster/';
         var api = "api/login"
 
         $http({method:'GET',url:url+api+"?"+data})
