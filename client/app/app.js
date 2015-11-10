@@ -16,12 +16,11 @@ config(['$routeProvider', function($routeProvider) {
 
 
 app.run(function($rootScope, $location, $http, $timeout, AuthService) {
-    //$rootScope.loggedInUser = null
-    $rootScope.loggedInUser = AuthService.isLoggedIn();
-    //$rootScope.loggedInUser = true
+    //$rootScope.loggedInUser = AuthService.isLoggedIn();
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
-        if ($rootScope.loggedInUser == false) {
+        if (AuthService.isLoggedIn() == false) {
           // no logged user, redirect to /login
+          $rootScope.loggedInUser = false;
           if (next.templateUrl === "auth/login.html") {
           } else {
             $location.path("/login");
@@ -94,6 +93,7 @@ app.factory( 'AuthService', ['$localStorage',function($localStorage) {
        },
        logout: function (success) {
            //tokenClaims = {};
+           isLoggedIn = false;
            delete $localStorage.token;
            success();
        },
