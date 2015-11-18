@@ -108,11 +108,28 @@ class PackDeliverable(object):
             for t in self.soup.findAll('table', f):
                 t.extract()
 
+	for ele in self.soup.findAll('h4',{'id':'siteSub'}):
+	    ptag = self.soup.new_tag('p')
+            ptag.string = ele.string
+            ele.replace_with(ptag)
+   
+    def dump_head(self):
+	import codecs
+	fd = codecs.open("/home/lcanas/repos/fiware-deliverme_beta/wikitool/wikitool/templates/head.tmpl", encoding="utf-8")
+	head = fd.read()
+	fd.close()
+	return head
+
     def dump_content(self):
         path = '/'.join([self.dest_dir,self.html_file_name])
         fd = open(path, 'w')
-        content = self.soup.prettify()
-        fd.write(content.encode("UTF-8"))
+        body = self.soup.body.prettify()
+	head = self.dump_head()
+	
+	fd.write("<html>")
+	fd.write(head.encode("UTF-8"))
+	fd.write(body.encode("UTF-8"))
+	fd.write("</html>")
         fd.close()
 
     def get_linked_pages(self):
@@ -194,10 +211,10 @@ class PackDeliverable(object):
             # <h3 id="siteSub">
             # From FIWARE Forge Wiki
             # </h3>
-            forge_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
+            """forge_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
             ptag = auxsoup.new_tag('p')
             ptag.string = forge_text.string
-            forge_text.replace_with(ptag)
+            forge_text.replace_with(ptag)"""
 
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
