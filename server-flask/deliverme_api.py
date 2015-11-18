@@ -68,10 +68,12 @@ def parse_token(req):
     return jwt.decode(token, 'elperrodesanroquenotiener4b0', algorithms='HS256')
 
 
-def write_log(project, page, time, user):
+def write_log(project, page, mytime, user):
     import json
+    import time
     json_file = "/home/lcanas/repos/fiware-deliverme/server-flask/static/log/log.json"
-    mydict = {"project":project, "page": page, "time": time, "user":user}
+    ts = str(time.time())
+    mydict = {"project":project, "page": page, "time": mytime, "timestamp": ts, "user":user}
 
     with open(json_file) as f:
         data = json.load(f)
