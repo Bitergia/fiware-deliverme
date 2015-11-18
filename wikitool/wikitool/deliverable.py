@@ -116,7 +116,7 @@ class PackDeliverable(object):
    
     def dump_head(self):
 	import codecs
-	fd = codecs.open("/home/lcanas/repos/fiware-deliverme_beta/wikitool/wikitool/templates/head.tmpl", encoding="utf-8")
+	fd = codecs.open("/home/lcanas/repos/fiware-deliverme/wikitool/wikitool/templates/head.tmpl", encoding="utf-8")
 	head = fd.read()
 	fd.close()
 	return head
