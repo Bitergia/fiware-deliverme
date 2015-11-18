@@ -30,7 +30,7 @@ app = Flask(__name__)
 
 def check_login(user, passwd):
     check = False
-    authfile = "auth.conf"
+    authfile = "/home/lcanas/repos/fiware-deliverme/server-flask/auth.conf"
     try:
         with open(authfile) as f:
             content = f.readlines()
