@@ -107,7 +107,8 @@ class PackDeliverable(object):
         for f in filter_table:
             for t in self.soup.findAll('table', f):
                 t.extract()
-
+	
+	# we filter out the text "From FIWARE .."
 	for ele in self.soup.findAll('h4',{'id':'siteSub'}):
 	    ptag = self.soup.new_tag('p')
             ptag.string = ele.string
@@ -136,11 +137,11 @@ class PackDeliverable(object):
         page_names = []
 
         tag_from = None
-        for hs in self.soup.findAll('h1'):
+        for hs in self.soup.findAll('h2'):
             if (hs.getText().rfind('Structure of this Doc') >= 0):
                 tag_from = hs
                 break
-        tag_to = tag_from.findNext('h1')
+        tag_to = tag_from.findNext('h2')
 
         cur = tag_from
         while (cur != tag_to):
@@ -169,6 +170,28 @@ class PackDeliverable(object):
             text = text.replace(c, d)
         return text
 
+    def rewrite_headers(self):
+	#
+	# rewrite the headers for the main page
+	#
+
+        # what are we filtering out here?
+        forge_big_text = self.soup.findAll('h3',{'id':'siteSub'})[0]
+        ptag = self.soup.new_tag('p')
+        ptag.string = forge_big_text.string
+        forge_big_text.replace_with(ptag)
+
+        # we shift the headers of the first page
+        for ele in self.soup.findAll('h2'):
+            ptag3 = self.soup.new_tag('h3')
+            ptag3.string = ele.find('span').getText()
+            ele.replace_with(ptag3)
+        for ele in self.soup.findAll('h1')[1:]:
+            ptag = self.soup.new_tag('h2')
+            ptag.string = ele.find('span').getText()
+            ele.replace_with(ptag)
+	
+
     def compose(self):
         session = self.connect()
         payload = {'title':self.page_name, 'printable':'yes'}
@@ -177,10 +200,7 @@ class PackDeliverable(object):
         self.html = r.content
         self.soup = BeautifulSoup(self.html)
 
-        forge_big_text = self.soup.findAll('h3',{'id':'siteSub'})[0]
-        ptag = self.soup.new_tag('p')
-        ptag.string = forge_big_text.string
-        forge_big_text.replace_with(ptag)
+	self.rewrite_headers()
 
         [x.extract() for x in self.soup.findAll('script')]
         [y.extract() for y in self.soup.findAll('link')]
@@ -206,15 +226,6 @@ class PackDeliverable(object):
             mytag.string = mainheader.string
             mytag['class'] = mainheader['class']
             mainheader.replace_with(mytag)
-
-            # we remove the heading for the text 
-            # <h3 id="siteSub">
-            # From FIWARE Forge Wiki
-            # </h3>
-            """forge_text = auxsoup.findAll('h3',{'id':'siteSub'})[0]
-            ptag = auxsoup.new_tag('p')
-            ptag.string = forge_text.string
-            forge_text.replace_with(ptag)"""
 
             [x.extract() for x in auxsoup.findAll('script')]
             [y.extract() for y in auxsoup.findAll('link')]
