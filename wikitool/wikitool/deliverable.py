@@ -125,6 +125,7 @@ class PackDeliverable(object):
         path = '/'.join([self.dest_dir,self.html_file_name])
         fd = open(path, 'w')
         body = self.soup.body.prettify()
+	body = body.replace('href="/plugins/','href="https://forge.fiware.org/plugins/')
 	head = self.dump_head()
 	
 	fd.write("<html>")
