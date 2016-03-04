@@ -128,7 +128,7 @@ class PackDeliverable(object):
 	body = body.replace('href="/plugins/','href="https://forge.fiware.org/plugins/')
 	body = body.replace('<caption>\n       </caption>','</tr>\n       <tr>')
 	head = self.dump_head()
-	
+
 	fd.write("<html>")
 	fd.write(head.encode("UTF-8"))
 	fd.write(body.encode("UTF-8"))
@@ -177,21 +177,38 @@ class PackDeliverable(object):
 	# rewrite the headers for the main page
 	#
 
+	# first we identify the type of template used
+	# so far we have two, identified by
+ 	# <h2>    <span class="mw-headline"></span>  Structure of this Document </h2>
+	# and
+	# <h1>    <span class="mw-headline"></span>  Structure of this Document </h1>
+
+	template_type = 0
+	text = 'Structure of this Document'
+	h1_list = self.soup.findAll('h1')
+	h2_list = self.soup.findAll('h2')
+	if any(text in str(s) for s in h1_list):
+	    template_type = 1
+	else:
+	    template_type = 2
+
         # what are we filtering out here?
         forge_big_text = self.soup.findAll('h3',{'id':'siteSub'})[0]
         ptag = self.soup.new_tag('p')
         ptag.string = forge_big_text.string
         forge_big_text.replace_with(ptag)
 
-        # we shift the headers of the first page
-        for ele in self.soup.findAll('h2'):
-            ptag3 = self.soup.new_tag('h3')
-            ptag3.string = ele.find('span').getText()
-            ele.replace_with(ptag3)
-        for ele in self.soup.findAll('h1')[1:]:
-            ptag = self.soup.new_tag('h2')
-            ptag.string = ele.find('span').getText()
-            ele.replace_with(ptag)
+	if template_type == 1:
+
+	    # we shift the headers of the first page
+	    for ele in self.soup.findAll('h2'):
+                ptag3 = self.soup.new_tag('h3')
+                ptag3.string = ele.find('span').getText()
+                ele.replace_with(ptag3)
+            for ele in self.soup.findAll('h1')[1:]:
+                ptag = self.soup.new_tag('h2')
+                ptag.string = ele.find('span').getText()
+                ele.replace_with(ptag)
 	
 
     def compose(self):
